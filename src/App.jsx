@@ -7,12 +7,13 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const backupsPerPage = 5;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchBackups = async () => {
       try {
         setLoading(true);
-        const response = await fetch("https://w8pkx428rp.us-east-1.awsapprunner.com/backups");
+        const response = await fetch(`${API_BASE_URL}/backups`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch backups: ${response.statusText}`);
@@ -45,7 +46,7 @@ const App = () => {
 
   const handleRestore = async (id) => {
     try {
-      const response = await fetch(`https://w8pkx428rp.us-east-1.awsapprunner.com/restore`, {
+      const response = await fetch(`${API_BASE_URL}/restore`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +66,7 @@ const App = () => {
 
   const handleManualBackup = async () => {
     try {
-      const response = await fetch("https://w8pkx428rp.us-east-1.awsapprunner.com/backup", {
+      const response = await fetch(`${API_BASE_URL}/backup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +80,7 @@ const App = () => {
 
       const data = await response.text();
 
-      const backupsResponse = await fetch("https://w8pkx428rp.us-east-1.awsapprunner.com/backups");
+      const backupsResponse = await fetch(`${API_BASE_URL}/backups`);
       if (backupsResponse.ok) {
         const backupsData = await backupsResponse.json();
         setAllBackups(backupsData);
